@@ -13,11 +13,15 @@ server.on("connection", (socket) => {
   socket.on("data", async (data) => {
     if (!fileHandle) {
       socket.pause(); // pause receiving data from the client
-      fileHandle = await fs.open(`storage/test.txt`, "w");
+
+      const dividerIndex = data.indexOf("-------");
+      const fileName = data.subarray(10, dividerIndex).toString("utf8");
+
+      fileHandle = await fs.open(`storage/${fileName}`, "w");
       fileWriteStream = fileHandle.createWriteStream();
 
       // Writing to our destination file
-      fileWriteStream.write(data);
+      fileWriteStream.write(data.subarray(dividerIndex + 7));
 
       socket.resume(); //resume receiving data from the client
 
