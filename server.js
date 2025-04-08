@@ -3,12 +3,11 @@ const fs = require("node:fs/promises");
 
 const server = net.createServer(() => {});
 
-let fileHandle, fileWriteStream;
-
 // this socket refers to the client endpoint
 // and it's actually a duplex stream
 server.on("connection", (socket) => {
   console.log("New connection!");
+  let fileHandle, fileWriteStream;
 
   socket.on("data", async (data) => {
     if (!fileHandle) {
